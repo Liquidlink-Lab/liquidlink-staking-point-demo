@@ -7,6 +7,10 @@ import { ToastViewport } from '@/components/ui/toast';
 
 const inter = Inter({ subsets: ['latin'] });
 
+export const metadata = {
+  generator: 'v0.dev',
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -24,6 +28,3 @@ export default function RootLayout({
   );
 }
 
-export const metadata = {
-  generator: 'v0.dev',
-};

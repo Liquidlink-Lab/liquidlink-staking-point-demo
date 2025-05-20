@@ -14,7 +14,7 @@ const WalletProvider = dynamic(
   () => import('@iota/dapp-kit').then((mod) => mod.WalletProvider),
   {
     ssr: false,
-  }
+  },
 );
 
 const queryClient = new QueryClient();
@@ -27,11 +27,11 @@ const { networkConfig } = createNetworkConfig({
 export default function Home() {
   return (
     <QueryClientProvider client={queryClient}>
-    <IotaClientProvider networks={networkConfig} defaultNetwork="testnet">
-      <WalletProvider>
-        <Insite />
-      </WalletProvider>
-    </IotaClientProvider>
+      <IotaClientProvider networks={networkConfig} defaultNetwork="testnet">
+        <WalletProvider>
+          <Insite />
+        </WalletProvider>
+      </IotaClientProvider>
     </QueryClientProvider>
   );
 }
