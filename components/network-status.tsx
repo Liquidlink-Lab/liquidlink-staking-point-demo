@@ -1,26 +1,31 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { Badge } from "@/components/ui/badge"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { Activity, Cpu, Layers, Lock } from "lucide-react"
+import { useState, useEffect } from 'react';
+import { Badge } from '@/components/ui/badge';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { Activity, Cpu, Layers, Lock } from 'lucide-react';
 
 export function NetworkStatus() {
-  const [blockHeight, setBlockHeight] = useState(3452167)
-  const [tps, setTps] = useState(42)
-  const [validators, setValidators] = useState(128)
-  const [latency, setLatency] = useState(0.24)
+  const [blockHeight, setBlockHeight] = useState(3452167);
+  const [tps, setTps] = useState(42);
+  const [validators, setValidators] = useState(128);
+  const [latency, setLatency] = useState(0.24);
 
   useEffect(() => {
     // Simulate changing network stats
     const interval = setInterval(() => {
-      setBlockHeight((prev) => prev + Math.floor(Math.random() * 3) + 1)
-      setTps(42 + Math.floor(Math.random() * 8) - 4)
-      setLatency(0.2 + (Math.random() * 0.1).toFixed(2))
-    }, 5000)
+      setBlockHeight((prev) => prev + Math.floor(Math.random() * 3) + 1);
+      setTps(42 + Math.floor(Math.random() * 8) - 4);
+      setLatency(0.2 + (Math.random() * 0.1).toFixed(2));
+    }, 5000);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="mb-8 flex flex-wrap justify-center gap-3">
@@ -34,7 +39,10 @@ export function NetworkStatus() {
               >
                 <Layers className="h-3.5 w-3.5 text-[#00e0c6]" />
                 <span className="text-xs font-medium">
-                  Block: <span className="text-white">{blockHeight.toLocaleString()}</span>
+                  Block:{' '}
+                  <span className="text-white">
+                    {blockHeight.toLocaleString()}
+                  </span>
                 </span>
               </Badge>
             </TooltipTrigger>
@@ -96,5 +104,5 @@ export function NetworkStatus() {
         </div>
       </TooltipProvider>
     </div>
-  )
+  );
 }

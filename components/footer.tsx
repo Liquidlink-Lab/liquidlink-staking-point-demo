@@ -1,4 +1,4 @@
-import { Github, Twitter, DiscIcon as Discord } from "lucide-react"
+import { Github, Twitter, DiscIcon as Discord } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -6,7 +6,10 @@ export function Footer() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
-            <p className="text-sm text-gray-500">© 2025 Liquid DeFi Protocol. All rights reserved.Design by liquidlink.</p>
+            <p className="text-sm text-gray-500">
+              © 2025 Liquid DeFi Protocol. All rights reserved.Design by
+              liquidlink.
+            </p>
           </div>
           <div className="flex space-x-6 mb-4 md:mb-0">
             <a href="#" className="text-sm text-gray-500 hover:text-[#00e0c6]">
@@ -33,5 +36,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

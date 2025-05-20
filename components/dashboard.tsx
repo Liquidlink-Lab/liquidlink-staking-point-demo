@@ -1,28 +1,28 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { ArrowUpRight, TrendingUp, Award, Clock, Zap } from "lucide-react"
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { ArrowUpRight, TrendingUp, Award, Clock, Zap } from 'lucide-react';
 
 export function Dashboard() {
-  const [stakedAmount, setStakedAmount] = useState(1250)
-  const [score, setScore] = useState(78)
-  const [apr, setApr] = useState(12.5)
-  const [timeLeft, setTimeLeft] = useState(14)
-  const [tvl, setTvl] = useState(4.28)
+  const [stakedAmount, setStakedAmount] = useState(1250);
+  const [score, setScore] = useState(78);
+  const [apr, setApr] = useState(12.5);
+  const [timeLeft, setTimeLeft] = useState(14);
+  const [tvl, setTvl] = useState(4.28);
 
   useEffect(() => {
     // Simulate score increasing over time
     const interval = setInterval(() => {
       setScore((prev) => {
-        const newScore = prev + 0.1
-        return newScore > 100 ? 100 : Number.parseFloat(newScore.toFixed(1))
-      })
-    }, 5000)
+        const newScore = prev + 0.1;
+        return newScore > 100 ? 100 : Number.parseFloat(newScore.toFixed(1));
+      });
+    }, 5000);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="mb-10">
@@ -39,8 +39,12 @@ export function Dashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">{stakedAmount.toLocaleString()} IOTA</div>
-            <div className="text-xs text-gray-500 mt-1">≈ ${(stakedAmount * 0.23).toLocaleString()}</div>
+            <div className="text-2xl font-bold text-white">
+              {stakedAmount.toLocaleString()} IOTA
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              ≈ ${(stakedAmount * 0.23).toLocaleString()}
+            </div>
           </CardContent>
         </Card>
 
@@ -100,5 +104,5 @@ export function Dashboard() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
