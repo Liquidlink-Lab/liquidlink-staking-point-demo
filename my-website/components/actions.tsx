@@ -1,6 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useIotaClient, useSignAndExecuteTransaction } from '@iota/dapp-kit';
+import { Transaction } from '@iota/iota-sdk/transactions';
+import { IOTA_CLOCK_OBJECT_ID } from '@iota/iota-sdk/utils';
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -24,6 +28,15 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { Slider } from '@/components/ui/slider';
 
+const PACKAGE_ID =
+  '0xe87fadb56ac565aa46d60c1f5fa30b22eb10b6ea0763da70d9eb75adb75fd0b3';
+const ACTION = 'stake';
+const LOCK_PERIOD = 0;
+const TREASURY_CAP_OBJECT_ID =
+  '0x91e82a7b9b2b5dfb0993eb01604d9172dc93c809850ca8b470fcd488feaea0b3';
+const VAULT_OBJECT_ID =
+  '0x7e8e05366388d163257d7d7427293db6795284f5e961cb6244c7273bb28ee652';
+
 export function Actions() {
   const [stakingAmount, setStakingAmount] = useState('');
   const [lendingAmount, setLendingAmount] = useState('');
@@ -31,7 +44,9 @@ export function Actions() {
   const [lockPeriod, setLockPeriod] = useState(30);
   const { toast } = useToast();
 
-  const handleStake = () => {
+  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+
+  const handleStake = async () => {
     if (
       !stakingAmount ||
       isNaN(Number(stakingAmount)) ||
@@ -45,11 +60,46 @@ export function Actions() {
       return;
     }
 
-    toast({
-      title: 'Staking Successful',
-      description: `You have successfully staked ${stakingAmount} IOTA`,
+    const tx = new Transaction();
+
+    const [coin] = tx.splitCoins(tx.gas, [stakingAmount]);
+    tx.moveCall({
+      target: `${PACKAGE_ID}::core::stake`,
+      arguments: [
+        tx.pure.string(ACTION),
+        coin,
+        tx.pure.u64(LOCK_PERIOD),
+        tx.object(IOTA_CLOCK_OBJECT_ID),
+        tx.object(TREASURY_CAP_OBJECT_ID),
+        tx.object(VAULT_OBJECT_ID),
+      ],
     });
-    setStakingAmount('');
+
+    signAndExecuteTransaction(
+      {
+        transaction: tx,
+        chain: 'iota:testnet',
+      },
+      {
+        onSuccess: (result) => {
+          console.log('executed transaction', result);
+          toast({
+            title: 'Staking Successful',
+            description: `You have successfully staked ${stakingAmount} IOTA`,
+          });
+          setStakingAmount('');
+        },
+
+        onError: (error) => {
+          console.error('error', error);
+          toast({
+            title: 'Staking Failed',
+            description: `You have failed to stake ${stakingAmount} IOTA`,
+            variant: 'destructive',
+          });
+        },
+      },
+    );
   };
 
   const handleLend = () => {
