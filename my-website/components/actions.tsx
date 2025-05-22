@@ -131,12 +131,12 @@ export function Actions() {
     }
 
     const tx = new Transaction();
-    //const [coin] = tx.splitCoins(tx.gas, [stakingAmount]);
+    const [coin] = tx.splitCoins(tx.gas, [stakingAmount]);
     const tokenObject = await getCertObject()
-    const [coin] = tx.splitCoins(
-      tx.object(tokenObject),
-      [withdrawAmount]
-    );
+    // const [coin] = tx.splitCoins(
+    //   tx.object(tokenObject),
+    //   [withdrawAmount]
+    // );
 
     tx.moveCall({
       target: `${PACKAGE_ID}::core::unstake`,
@@ -178,33 +178,15 @@ export function Actions() {
   };
 
   const getCertObject = async() => {
-    //user: string
-    const user2 = '0x44cbb06b6783eed0b5411ad76eb05ff2562b132daa519484141304f37d1c24c3';
-    const vIotaCoins = await client.getOwnedObjects({
-      owner: user2,
-      options: { showType: true, showContent: true },
+    
+    const coins = await client.getCoins({
+      owner: '0x3aad26a6f10d704b1619c37e780f70ff5949b21abf4435c9b115d62de6227345',
+      coinType: '0xe87fadb56ac565aa46d60c1f5fa30b22eb10b6ea0763da70d9eb75adb75fd0b3::cert::CERT',
     });
+    
+    const largestUsdt = coins.data.sort((a, b) => Number(b.balance) - Number(a.balance))[0];
 
-    let colloctBook = 0;
-    let objectId;
-    vIotaCoins.data.map((index) => {
-      if (index.data?.type === CERT_TYPE) {
-
-        const bal = parseInt((index as any).data?.content?.fields?.balance);
-        //console.log(typeof bal)
-        if (typeof bal === 'number' && bal > colloctBook) {
-          colloctBook = bal;
-
-          objectId = index
-        }
-
-      }
-
-    });
-    console.log(colloctBook)
-    console.log(objectId?.data)
-
-    return objectId?.data
+    console.log(largestUsdt)
   }
 
   const handleFreeTokenClaim = () => {
