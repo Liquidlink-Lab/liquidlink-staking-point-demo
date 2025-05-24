@@ -27,7 +27,7 @@ export function Dashboard() {
   return (
     <div className="mb-10">
       <h2 className="text-2xl font-semibold mb-4 text-white flex items-center">
-        <Zap className="mr-2 h-5 w-5 text-[#00e0c6]" />
+        <Zap className="mr-2 h-5 w-5 text-[#9763e0]" />
         Dashboard
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -35,7 +35,7 @@ export function Dashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-400 flex items-center">
               Staked Amount
-              <ArrowUpRight className="h-4 w-4 ml-1 text-[#00e0c6]" />
+              <ArrowUpRight className="h-4 w-4 ml-1 text-[#9763e0]" />
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -52,7 +52,7 @@ export function Dashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-400 flex items-center">
               Your Liquidlink Score
-              <Award className="h-4 w-4 ml-1 text-[#00e0c6]" />
+              <Award className="h-4 w-4 ml-1 text-[#9763e0]" />
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -68,7 +68,7 @@ export function Dashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-400 flex items-center">
               APY
-              <TrendingUp className="h-4 w-4 ml-1 text-[#00e0c6]" />
+              <TrendingUp className="h-4 w-4 ml-1 text-[#9763e0]" />
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -81,7 +81,7 @@ export function Dashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-400 flex items-center">
               Next Reward
-              <Clock className="h-4 w-4 ml-1 text-[#00e0c6]" />
+              <Clock className="h-4 w-4 ml-1 text-[#9763e0]" />
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -94,7 +94,7 @@ export function Dashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-400 flex items-center">
               Protocol TVL
-              <TrendingUp className="h-4 w-4 ml-1 text-[#00e0c6]" />
+              <TrendingUp className="h-4 w-4 ml-1 text-[#9763e0]" />
             </CardTitle>
           </CardHeader>
           <CardContent>

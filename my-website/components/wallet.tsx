@@ -26,12 +26,6 @@ export function Wallet() {
   const [balance, setBalance] = useState(0);
   const { toast } = useToast();
 
-  const connectWallet = () => {
-    // Simulate wallet connection
-    setConnected(true);
-    setAddress('iot1...' + Math.random().toString(36).substring(2, 8));
-    setBalance(Math.floor(Math.random() * 10000) + 1000);
-  };
 
   const disconnectWallet = () => {
     setConnected(false);
@@ -51,11 +45,11 @@ export function Wallet() {
     <header className="bg-black/80 backdrop-blur-md border-b border-gray-800 py-4 sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <div className="flex items-center">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#00a0b0] to-[#00e0c6] flex items-center justify-center mr-2">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-r bg-[#9763e0] flex items-center justify-center mr-2">
             <WalletIcon className="h-5 w-5 text-black" />
           </div>
           <span className="text-xl font-bold text-white">
-            Liquid <span className="text-[#00e0c6]">DeFi</span>
+            Liquid <span className="text-[#9763e0]">DeFi</span>
           </span>
         </div>
 
@@ -90,18 +84,13 @@ export function Wallet() {
                   <span>View on Explorer</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-gray-700" />
-                <DropdownMenuItem
-                  className="hover:bg-gray-800 cursor-pointer text-red-400"
-                  onClick={disconnectWallet}
-                >
-                  Disconnect
-                </DropdownMenuItem>
+
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         ) : (
           <div
-            className="bg-gradient-to-r from-[#00a0b0] to-[#00e0c6] hover:from-[#008a99] hover:to-[#00c6af] text-black font-medium"
+            className="bg-gradient-to-r  text-black font-medium"
             // onClick={connectWallet}
           >
             <ConnectButton />

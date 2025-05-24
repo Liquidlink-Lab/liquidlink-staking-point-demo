@@ -37,7 +37,7 @@ export function NetworkStatus() {
                 variant="outline"
                 className="py-2 px-3 border-gray-700 bg-black/50 backdrop-blur-sm flex items-center gap-2"
               >
-                <Layers className="h-3.5 w-3.5 text-[#00e0c6]" />
+                <Layers className="h-3.5 w-3.5 text-[#9763e0]" />
                 <span className="text-xs font-medium">
                   Block:{' '}
                   <span className="text-white">
@@ -57,7 +57,7 @@ export function NetworkStatus() {
                 variant="outline"
                 className="py-2 px-3 border-gray-700 bg-black/50 backdrop-blur-sm flex items-center gap-2"
               >
-                <Activity className="h-3.5 w-3.5 text-[#00e0c6]" />
+                <Activity className="h-3.5 w-3.5 text-[#9763e0]" />
                 <span className="text-xs font-medium">
                   TPS: <span className="text-white">{tps}</span>
                 </span>
@@ -74,7 +74,7 @@ export function NetworkStatus() {
                 variant="outline"
                 className="py-2 px-3 border-gray-700 bg-black/50 backdrop-blur-sm flex items-center gap-2"
               >
-                <Cpu className="h-3.5 w-3.5 text-[#00e0c6]" />
+                <Cpu className="h-3.5 w-3.5 text-[#9763e0]" />
                 <span className="text-xs font-medium">
                   Validators: <span className="text-white">{validators}</span>
                 </span>
@@ -91,7 +91,7 @@ export function NetworkStatus() {
                 variant="outline"
                 className="py-2 px-3 border-gray-700 bg-black/50 backdrop-blur-sm flex items-center gap-2"
               >
-                <Lock className="h-3.5 w-3.5 text-[#00e0c6]" />
+                <Lock className="h-3.5 w-3.5 text-[#9763e0]" />
                 <span className="text-xs font-medium">
                   Latency: <span className="text-white">{latency}s</span>
                 </span>
