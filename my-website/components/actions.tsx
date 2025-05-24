@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Slider } from '@/components/ui/slider';
-import { IotaClient,getFullnodeUrl } from '@iota/iota-sdk/client';
+import { IotaClient, getFullnodeUrl } from '@iota/iota-sdk/client';
 
 const PACKAGE_ID =
   '0xe87fadb56ac565aa46d60c1f5fa30b22eb10b6ea0763da70d9eb75adb75fd0b3';
@@ -39,12 +39,12 @@ const TREASURY_CAP_OBJECT_ID =
 const VAULT_OBJECT_ID =
   '0x7e8e05366388d163257d7d7427293db6795284f5e961cb6244c7273bb28ee652';
 
-const CERT_TYPE = '0x2::coin::Coin<0xe87fadb56ac565aa46d60c1f5fa30b22eb10b6ea0763da70d9eb75adb75fd0b3::cert::CERT>'
+const CERT_TYPE =
+  '0x2::coin::Coin<0xe87fadb56ac565aa46d60c1f5fa30b22eb10b6ea0763da70d9eb75adb75fd0b3::cert::CERT>';
 
 const client = new IotaClient({
   url: getFullnodeUrl('testnet'),
 });
-
 
 export function Actions() {
   const [stakingAmount, setStakingAmount] = useState('');
@@ -72,7 +72,6 @@ export function Actions() {
 
     const tx = new Transaction();
 
-
     const [coin] = tx.splitCoins(tx.gas, [stakingAmount]);
 
     tx.moveCall({
@@ -87,36 +86,38 @@ export function Actions() {
       ],
     });
 
-    signAndExecuteTransaction(
-      {
-        transaction: tx,
-        chain: 'iota:testnet',
-      },
-      {
-        onSuccess: (result) => {
-          console.log('executed transaction', result);
-          toast({
-            title: 'Staking Successful',
-            description: `You have successfully staked ${stakingAmount} IOTA`,
-          });
-          setStakingAmount('');
+    try {
+      signAndExecuteTransaction(
+        {
+          transaction: tx,
+          chain: 'iota:testnet',
         },
+        {
+          onSuccess: (result) => {
+            console.log('executed transaction', result);
+            toast({
+              title: 'Staking Successful',
+              description: `You have successfully staked ${stakingAmount} IOTA`,
+            });
+            setStakingAmount('');
+          },
 
-        onError: (error) => {
-          console.error('error', error);
-          toast({
-            title: 'Staking Failed',
-            description: `You have failed to stake ${stakingAmount} IOTA`,
-            variant: 'destructive',
-          });
+          onError: (error) => {
+            console.error('error', error);
+            toast({
+              title: 'Staking Failed',
+              description: `You have failed to stake ${stakingAmount} IOTA`,
+              variant: 'destructive',
+            });
+          },
         },
-      },
-    );
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-
-
-  const handleWithdraw = async() => {
+  const handleWithdraw = async () => {
     if (
       !withdrawAmount ||
       isNaN(Number(withdrawAmount)) ||
@@ -132,11 +133,8 @@ export function Actions() {
 
     const tx = new Transaction();
     //const [coin] = tx.splitCoins(tx.gas, [stakingAmount]);
-    const tokenObject = await getCertObject()
-    const [coin] = tx.splitCoins(
-      tx.object(tokenObject),
-      [withdrawAmount]
-    );
+    const tokenObject = await getCertObject();
+    const [coin] = tx.splitCoins(tx.object(tokenObject), [withdrawAmount]);
 
     tx.moveCall({
       target: `${PACKAGE_ID}::core::unstake`,
@@ -150,62 +148,64 @@ export function Actions() {
       ],
     });
 
-    signAndExecuteTransaction(
-      {
-        transaction: tx,
-        chain: 'iota:testnet',
-      },
-      {
-        onSuccess: (result) => {
-          console.log('executed transaction', result);
-          toast({
-            title: 'Staking Successful',
-            description: `You have successfully staked ${withdrawAmount} IOTA`,
-          });
-          setStakingAmount('');
+    try {
+      signAndExecuteTransaction(
+        {
+          transaction: tx,
+          chain: 'iota:testnet',
         },
+        {
+          onSuccess: (result) => {
+            console.log('executed transaction', result);
+            toast({
+              title: 'Staking Successful',
+              description: `You have successfully staked ${withdrawAmount} IOTA`,
+            });
+            setStakingAmount('');
+          },
 
-        onError: (error) => {
-          console.error('error', error);
-          toast({
-            title: 'Staking Failed',
-            description: `You have failed to stake ${withdrawAmount} IOTA`,
-            variant: 'destructive',
-          });
+          onError: (error) => {
+            console.error('error', error);
+            toast({
+              title: 'Staking Failed',
+              description: `You have failed to stake ${withdrawAmount} IOTA`,
+              variant: 'destructive',
+            });
+          },
         },
-      },
-    );
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  const getCertObject = async() => {
+  const getCertObject = async () => {
     //user: string
-    const user2 = '0x44cbb06b6783eed0b5411ad76eb05ff2562b132daa519484141304f37d1c24c3';
+    const user2 =
+      '0x44cbb06b6783eed0b5411ad76eb05ff2562b132daa519484141304f37d1c24c3';
     const vIotaCoins = await client.getOwnedObjects({
       owner: user2,
       options: { showType: true, showContent: true },
     });
 
-    let colloctBook = 0;
+    let tokenValue = 0;
     let objectId;
     vIotaCoins.data.map((index) => {
       if (index.data?.type === CERT_TYPE) {
-
         const bal = parseInt((index as any).data?.content?.fields?.balance);
         //console.log(typeof bal)
-        if (typeof bal === 'number' && bal > colloctBook) {
-          colloctBook = bal;
+        if (typeof bal === 'number' && bal > tokenValue) {
+          tokenValue = bal;
 
-          objectId = index
+          objectId = index;
         }
-
       }
-
     });
-    console.log(colloctBook)
-    console.log(objectId?.data)
+    console.log(tokenValue);
+    console.log(objectId?.data.objectId);
 
-    return objectId?.data
-  }
+    return objectId?.data.objectId;
+  };
 
   const handleFreeTokenClaim = () => {
     toast({
@@ -329,7 +329,6 @@ export function Actions() {
           </Card>
         </TabsContent>
 
-
         <TabsContent value="withdraw">
           <Card className="bg-gray-900 border-gray-800">
             <CardHeader>
@@ -394,13 +393,13 @@ export function Actions() {
                 <ArrowDownToLine className="mr-2 h-4 w-4" />
                 Withdraw Now
               </Button>
-              <Button
+              {/* <Button
                 className="w-full bg-gradient-to-r from-[#00a0b0] to-[#00e0c6] hover:from-[#008a99] hover:to-[#00c6af] text-black font-medium"
                 onClick={getCertObject}
               >
                 <ArrowDownToLine className="mr-2 h-4 w-4" />
-              test
-              </Button>
+                test
+              </Button> */}
             </CardFooter>
           </Card>
         </TabsContent>
