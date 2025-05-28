@@ -88,31 +88,35 @@ export function Actions() {
       ],
     });
 
-    signAndExecuteTransaction(
-      {
-        transaction: tx,
-        chain: 'iota:testnet',
-      },
-      {
-        onSuccess: (result) => {
-          console.log('executed transaction', result);
-          toast({
-            title: 'Staking Successful',
-            description: `You have successfully staked ${stakingAmount} IOTA`,
-          });
-          setStakingAmount('');
+    try {
+      signAndExecuteTransaction(
+        {
+          transaction: tx,
+          chain: 'iota:testnet',
         },
+        {
+          onSuccess: (result) => {
+            console.log('executed transaction', result);
+            toast({
+              title: 'Staking Successful',
+              description: `You have successfully staked ${stakingAmount} IOTA`,
+            });
+            setStakingAmount('');
+          },
 
-        onError: (error) => {
-          console.error('error', error);
-          toast({
-            title: 'Staking Failed',
-            description: `You have failed to stake ${stakingAmount} IOTA`,
-            variant: 'destructive',
-          });
+          onError: (error) => {
+            console.error('error', error);
+            toast({
+              title: 'Staking Failed',
+              description: `You have failed to stake ${stakingAmount} IOTA`,
+              variant: 'destructive',
+            });
+          },
         },
-      },
-    );
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleWithdraw = async () => {
@@ -130,12 +134,9 @@ export function Actions() {
     }
 
     const tx = new Transaction();
-    const [coin] = tx.splitCoins(tx.gas, [stakingAmount]);
+    //const [coin] = tx.splitCoins(tx.gas, [stakingAmount]);
     const tokenObject = await getCertObject();
-    // const [coin] = tx.splitCoins(
-    //   tx.object(tokenObject),
-    //   [withdrawAmount]
-    // );
+    const [coin] = tx.splitCoins(tx.object(tokenObject), [withdrawAmount]);
 
     tx.moveCall({
       target: `${PACKAGE_ID}::core::unstake`,
@@ -149,46 +150,64 @@ export function Actions() {
       ],
     });
 
-    signAndExecuteTransaction(
-      {
-        transaction: tx,
-        chain: 'iota:testnet',
-      },
-      {
-        onSuccess: (result) => {
-          console.log('executed transaction', result);
-          toast({
-            title: 'Staking Successful',
-            description: `You have successfully staked ${withdrawAmount} IOTA`,
-          });
-          setStakingAmount('');
+    try {
+      signAndExecuteTransaction(
+        {
+          transaction: tx,
+          chain: 'iota:testnet',
         },
+        {
+          onSuccess: (result) => {
+            console.log('executed transaction', result);
+            toast({
+              title: 'Staking Successful',
+              description: `You have successfully staked ${withdrawAmount} IOTA`,
+            });
+            setStakingAmount('');
+          },
 
-        onError: (error) => {
-          console.error('error', error);
-          toast({
-            title: 'Staking Failed',
-            description: `You have failed to stake ${withdrawAmount} IOTA`,
-            variant: 'destructive',
-          });
+          onError: (error) => {
+            console.error('error', error);
+            toast({
+              title: 'Staking Failed',
+              description: `You have failed to stake ${withdrawAmount} IOTA`,
+              variant: 'destructive',
+            });
+          },
         },
-      },
-    );
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const getCertObject = async () => {
-    const coins = await client.getCoins({
-      owner:
-        '0x3aad26a6f10d704b1619c37e780f70ff5949b21abf4435c9b115d62de6227345',
-      coinType:
-        '0xe87fadb56ac565aa46d60c1f5fa30b22eb10b6ea0763da70d9eb75adb75fd0b3::cert::CERT',
+    //user: string
+    const user2 =
+      '0x44cbb06b6783eed0b5411ad76eb05ff2562b132daa519484141304f37d1c24c3';
+    const vIotaCoins = await client.getOwnedObjects({
+      owner: user2,
+      options: { showType: true, showContent: true },
     });
 
-    const largestUsdt = coins.data.sort(
-      (a, b) => Number(b.balance) - Number(a.balance),
-    )[0];
 
-    console.log(largestUsdt);
+    let tokenValue = 0;
+    let objectId;
+    vIotaCoins.data.map((index) => {
+      if (index.data?.type === CERT_TYPE) {
+        const bal = parseInt((index as any).data?.content?.fields?.balance);
+        //console.log(typeof bal)
+        if (typeof bal === 'number' && bal > tokenValue) {
+          tokenValue = bal;
+
+          objectId = index;
+        }
+      }
+    });
+    console.log(tokenValue);
+    console.log(objectId?.data.objectId);
+
+    return objectId?.data.objectId;
   };
 
   const handleFreeTokenClaim = () => {
@@ -201,7 +220,7 @@ export function Actions() {
   return (
     <div className="mb-10">
       <h2 className="text-2xl font-semibold mb-4 text-white flex items-center">
-        <Zap className="mr-2 h-5 w-5 text-[#00e0c6]" />
+        <Zap className="mr-2 h-5 w-5 text-[#9763e0]" />
         DeFi Actions
       </h2>
 
@@ -209,16 +228,16 @@ export function Actions() {
         <TabsList className="grid grid-cols-2 mb-4 bg-gray-900 w-full">
           <TabsTrigger
             value="stake"
-            className="data-[state=active]:bg-gray-800 data-[state=active]:text-[#00e0c6]"
+            className="data-[state=active]:bg-gray-800 data-[state=active]:text-[#9763e0]"
           >
             Stake
           </TabsTrigger>
-          {/* <TabsTrigger value="lend" className="data-[state=active]:bg-gray-800 data-[state=active]:text-[#00e0c6]">
+          {/* <TabsTrigger value="lend" className="data-[state=active]:bg-gray-800 data-[state=active]:text-[#9763e0]">
             Lend
           </TabsTrigger> */}
           <TabsTrigger
             value="withdraw"
-            className="data-[state=active]:bg-gray-800 data-[state=active]:text-[#00e0c6]"
+            className="data-[state=active]:bg-gray-800 data-[state=active]:text-[#9763e0]"
           >
             Withdraw
           </TabsTrigger>
@@ -228,7 +247,7 @@ export function Actions() {
           <Card className="bg-gray-900 border-gray-800">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
-                <Lock className="mr-2 h-5 w-5 text-[#00e0c6]" />
+                <Lock className="mr-2 h-5 w-5 text-[#9763e0]" />
                 Stake IOTA
               </CardTitle>
               <CardDescription className="text-gray-400">
@@ -283,7 +302,7 @@ export function Actions() {
                   </div>
                 </div>
 
-                <div className="rounded-lg bg-gray-800 p-4 border border-gray-700">
+                {/* <div className="rounded-lg bg-gray-800 p-4 border border-gray-700">
                   <div className="flex justify-between text-sm mb-2">
                     <span className="text-gray-400">Estimated APY</span>
                     <span className="font-medium text-white">
@@ -298,12 +317,12 @@ export function Actions() {
                         : `${lockPeriod} days`}
                     </span>
                   </div>
-                </div>
+                </div> */}
               </div>
             </CardContent>
             <CardFooter>
               <Button
-                className="w-full bg-gradient-to-r from-[#00a0b0] to-[#00e0c6] hover:from-[#008a99] hover:to-[#00c6af] text-black font-medium"
+                className="w-full bg-gradient-to-r from-[#006db0] to-[#9763e0] hover:from-[#9763e0] hover:to-[#a78bcf] text-black font-medium"
                 onClick={handleStake}
               >
                 <Coins className="mr-2 h-4 w-4" />
@@ -317,7 +336,7 @@ export function Actions() {
           <Card className="bg-gray-900 border-gray-800">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
-                <Unlock className="mr-2 h-5 w-5 text-[#00e0c6]" />
+                <Unlock className="mr-2 h-5 w-5 text-[#9763e0]" />
                 Withdraw IOTA
               </CardTitle>
               <CardDescription className="text-gray-400">
@@ -371,19 +390,19 @@ export function Actions() {
             </CardContent>
             <CardFooter>
               <Button
-                className="w-full bg-gradient-to-r from-[#00a0b0] to-[#00e0c6] hover:from-[#008a99] hover:to-[#00c6af] text-black font-medium"
+                className="w-full bg-gradient-to-r from-[#006db0] to-[#9763e0] hover:from-[#9763e0] hover:to-[#a78bcf] text-black font-medium"
                 onClick={handleWithdraw}
               >
                 <ArrowDownToLine className="mr-2 h-4 w-4" />
                 Withdraw Now
               </Button>
-              <Button
-                className="w-full bg-gradient-to-r from-[#00a0b0] to-[#00e0c6] hover:from-[#008a99] hover:to-[#00c6af] text-black font-medium"
+              {/* <Button
+                className="w-full bg-gradient-to-r from-[#00a0b0] to-[#9763e0] hover:from-[#008a99] hover:to-[#00c6af] text-black font-medium"
                 onClick={getCertObject}
               >
                 <ArrowDownToLine className="mr-2 h-4 w-4" />
                 test
-              </Button>
+              </Button> */}
             </CardFooter>
           </Card>
         </TabsContent>
@@ -394,7 +413,7 @@ export function Actions() {
           <div className="absolute inset-0 bg-[url('/abstract-digital-grid.png')] opacity-10"></div>
           <CardHeader className="relative z-10">
             <CardTitle className="flex items-center text-white">
-              <Gift className="h-5 w-5 mr-2 text-[#00e0c6]" />
+              <Gift className="h-5 w-5 mr-2 text-[#9763e0]" />
               Free Token Claim
             </CardTitle>
             <CardDescription className="text-gray-400 text-xl">
@@ -410,7 +429,7 @@ export function Actions() {
           </CardContent>
           <CardFooter className="relative z-10">
             <Button
-              className="w-full bg-gradient-to-r from-[#00a0b0] to-[#00e0c6] hover:from-[#008a99] hover:to-[#00c6af] text-black font-medium"
+              className="w-full bg-gradient-to-r from-[#006db0] to-[#9763e0] hover:from-[#9763e0] hover:to-[#a78bcf] text-black font-medium"
               onClick={handleFreeTokenClaim}
             >
               <Gift className="mr-2 h-4 w-4" />

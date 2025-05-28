@@ -28,7 +28,7 @@ export default function Home() {
   return (
     <QueryClientProvider client={queryClient}>
       <IotaClientProvider networks={networkConfig} defaultNetwork="testnet">
-        <WalletProvider>
+        <WalletProvider autoConnect>
           <Insite />
         </WalletProvider>
       </IotaClientProvider>
@@ -45,7 +45,7 @@ function Insite() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <main className="py-8">
             <h1 className="text-4xl font-bold text-center mb-2 text-white">
-              Liquid <span className="text-[#00e0c6]">DeFi</span> Protocol
+              Liquid <span className="text-[#9763e0]">DeFi</span> Protocol
             </h1>
             <p className="text-center text-gray-400 mb-8">
               LiquidLink points system Staking demo
