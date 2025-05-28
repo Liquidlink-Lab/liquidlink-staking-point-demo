@@ -4,25 +4,46 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { ArrowUpRight, TrendingUp, Award, Clock, Zap } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { useCurrentAccount } from '@iota/dapp-kit';
+
+type ScoreResponse = {
+  address: string;
+  points: {
+    pointsByKey: {
+      stake: number;
+    };
+    totalPoints: number;
+  };
+  rank: number;
+};
 
 export function Dashboard() {
-  const [stakedAmount, setStakedAmount] = useState(1250);
-  const [score, setScore] = useState(78);
-  const [apr, setApr] = useState(12.5);
-  const [timeLeft, setTimeLeft] = useState(14);
-  const [tvl, setTvl] = useState(4.28);
+  const [stakedAmount] = useState(1250);
+  const account = useCurrentAccount();
 
-  useEffect(() => {
-    // Simulate score increasing over time
-    const interval = setInterval(() => {
-      setScore((prev) => {
-        const newScore = prev + 0.1;
-        return newScore > 100 ? 100 : Number.parseFloat(newScore.toFixed(1));
-      });
-    }, 5000);
+  const { data: score = 0 } = useQuery({
+    queryKey: ['score', account],
+    queryFn: async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER}/leaderboard/${account?.address}`,
+      );
 
-    return () => clearInterval(interval);
-  }, []);
+      const score = (await response.json()) as ScoreResponse;
+      const { points } = score;
+
+      return points.totalPoints;
+    },
+    enabled: !!account?.address,
+  });
+
+  const { data: tvl } = useQuery({
+    queryKey: ['tvl'],
+    queryFn: () => {
+      return 4.28;
+    },
+    enabled: !!account?.address,
+  });
 
   return (
     <div className="mb-10">
@@ -57,7 +78,9 @@ export function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between">
-              <div className="text-2xl font-bold text-white">{score}</div>
+              <div className="text-2xl font-bold text-white">
+                {score.toFixed(2)}
+              </div>
               {/* <div className="text-xs px-2 py-1 rounded-full bg-green-900 text-green-300">Good</div> */}
             </div>
             {/* <Progress value={score} className="h-2 mt-2" /> */}

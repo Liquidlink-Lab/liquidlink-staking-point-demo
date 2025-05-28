@@ -1,7 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useIotaClient, useSignAndExecuteTransaction } from '@iota/dapp-kit';
+import {
+  useCurrentAccount,
+  useSignAndExecuteTransaction,
+} from '@iota/dapp-kit';
 import { Transaction } from '@iota/iota-sdk/transactions';
 import { IOTA_CLOCK_OBJECT_ID, IOTA_DECIMALS } from '@iota/iota-sdk/utils';
 
@@ -32,7 +35,6 @@ import { IotaClient, getFullnodeUrl } from '@iota/iota-sdk/client';
 const PACKAGE_ID =
   '0xe87fadb56ac565aa46d60c1f5fa30b22eb10b6ea0763da70d9eb75adb75fd0b3';
 const ACTION = 'stake';
-const ACTION2 = 'unstake';
 const LOCK_PERIOD = 86400 * 1000;
 const TREASURY_CAP_OBJECT_ID =
   '0x91e82a7b9b2b5dfb0993eb01604d9172dc93c809850ca8b470fcd488feaea0b3';
@@ -55,6 +57,7 @@ export function Actions() {
   const { toast } = useToast();
 
   const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+  const account = useCurrentAccount();
 
   const handleStake = async () => {
     if (
@@ -133,6 +136,8 @@ export function Actions() {
       return;
     }
 
+    console.log('Withdraw');
+
     const tx = new Transaction();
     //const [coin] = tx.splitCoins(tx.gas, [stakingAmount]);
     const tokenObject = await getCertObject();
@@ -141,7 +146,7 @@ export function Actions() {
     tx.moveCall({
       target: `${PACKAGE_ID}::core::unstake`,
       arguments: [
-        tx.pure.string(ACTION2),
+        tx.pure.string(ACTION),
         coin,
         tx.pure.u64(LOCK_PERIOD),
         tx.object(IOTA_CLOCK_OBJECT_ID),
@@ -183,13 +188,20 @@ export function Actions() {
 
   const getCertObject = async () => {
     //user: string
-    const user2 =
-      '0x44cbb06b6783eed0b5411ad76eb05ff2562b132daa519484141304f37d1c24c3';
+    const user2 = account?.address;
+    if (!user2) {
+      toast({
+        title: 'Error',
+        description: 'Please connect your wallet',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     const vIotaCoins = await client.getOwnedObjects({
       owner: user2,
       options: { showType: true, showContent: true },
     });
-
 
     let tokenValue = 0;
     let objectId;
@@ -204,8 +216,9 @@ export function Actions() {
         }
       }
     });
-    console.log(tokenValue);
-    console.log(objectId?.data.objectId);
+
+    // console.log(tokenValue);
+    // console.log(objectId?.data.objectId);
 
     return objectId?.data.objectId;
   };
