@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useIotaClient, useSignAndExecuteTransaction } from '@iota/dapp-kit';
 import { Transaction } from '@iota/iota-sdk/transactions';
-import { IOTA_CLOCK_OBJECT_ID } from '@iota/iota-sdk/utils';
+import { IOTA_CLOCK_OBJECT_ID, IOTA_DECIMALS } from '@iota/iota-sdk/utils';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -27,24 +27,24 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Slider } from '@/components/ui/slider';
-import { IotaClient,getFullnodeUrl } from '@iota/iota-sdk/client';
+import { IotaClient, getFullnodeUrl } from '@iota/iota-sdk/client';
 
 const PACKAGE_ID =
   '0xe87fadb56ac565aa46d60c1f5fa30b22eb10b6ea0763da70d9eb75adb75fd0b3';
 const ACTION = 'stake';
 const ACTION2 = 'unstake';
-const LOCK_PERIOD = 0;
+const LOCK_PERIOD = 86400 * 1000;
 const TREASURY_CAP_OBJECT_ID =
   '0x91e82a7b9b2b5dfb0993eb01604d9172dc93c809850ca8b470fcd488feaea0b3';
 const VAULT_OBJECT_ID =
   '0x7e8e05366388d163257d7d7427293db6795284f5e961cb6244c7273bb28ee652';
 
-const CERT_TYPE = '0x2::coin::Coin<0xe87fadb56ac565aa46d60c1f5fa30b22eb10b6ea0763da70d9eb75adb75fd0b3::cert::CERT>'
+const CERT_TYPE =
+  '0x2::coin::Coin<0xe87fadb56ac565aa46d60c1f5fa30b22eb10b6ea0763da70d9eb75adb75fd0b3::cert::CERT>';
 
 const client = new IotaClient({
   url: getFullnodeUrl('testnet'),
 });
-
 
 export function Actions() {
   const [stakingAmount, setStakingAmount] = useState('');
@@ -70,8 +70,9 @@ export function Actions() {
       return;
     }
 
-    const tx = new Transaction();
+    console.log(stakingAmount);
 
+    const tx = new Transaction();
 
     const [coin] = tx.splitCoins(tx.gas, [stakingAmount]);
 
@@ -114,9 +115,7 @@ export function Actions() {
     );
   };
 
-
-
-  const handleWithdraw = async() => {
+  const handleWithdraw = async () => {
     if (
       !withdrawAmount ||
       isNaN(Number(withdrawAmount)) ||
@@ -132,7 +131,7 @@ export function Actions() {
 
     const tx = new Transaction();
     const [coin] = tx.splitCoins(tx.gas, [stakingAmount]);
-    const tokenObject = await getCertObject()
+    const tokenObject = await getCertObject();
     // const [coin] = tx.splitCoins(
     //   tx.object(tokenObject),
     //   [withdrawAmount]
@@ -177,17 +176,20 @@ export function Actions() {
     );
   };
 
-  const getCertObject = async() => {
-    
+  const getCertObject = async () => {
     const coins = await client.getCoins({
-      owner: '0x3aad26a6f10d704b1619c37e780f70ff5949b21abf4435c9b115d62de6227345',
-      coinType: '0xe87fadb56ac565aa46d60c1f5fa30b22eb10b6ea0763da70d9eb75adb75fd0b3::cert::CERT',
+      owner:
+        '0x3aad26a6f10d704b1619c37e780f70ff5949b21abf4435c9b115d62de6227345',
+      coinType:
+        '0xe87fadb56ac565aa46d60c1f5fa30b22eb10b6ea0763da70d9eb75adb75fd0b3::cert::CERT',
     });
-    
-    const largestUsdt = coins.data.sort((a, b) => Number(b.balance) - Number(a.balance))[0];
 
-    console.log(largestUsdt)
-  }
+    const largestUsdt = coins.data.sort(
+      (a, b) => Number(b.balance) - Number(a.balance),
+    )[0];
+
+    console.log(largestUsdt);
+  };
 
   const handleFreeTokenClaim = () => {
     toast({
@@ -311,7 +313,6 @@ export function Actions() {
           </Card>
         </TabsContent>
 
-
         <TabsContent value="withdraw">
           <Card className="bg-gray-900 border-gray-800">
             <CardHeader>
@@ -381,7 +382,7 @@ export function Actions() {
                 onClick={getCertObject}
               >
                 <ArrowDownToLine className="mr-2 h-4 w-4" />
-              test
+                test
               </Button>
             </CardFooter>
           </Card>
