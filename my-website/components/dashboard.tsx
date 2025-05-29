@@ -26,7 +26,7 @@ export function Dashboard() {
     queryKey: ['score', account],
     queryFn: async () => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/leaderboard/${account?.address}`,
+        `/api/leaderboard/${account?.address}?network=testnet`,
       );
 
       const score = (await response.json()) as ScoreResponse;
