@@ -298,7 +298,7 @@ export function Actions() {
                 </div>
 
                 <div className="space-y-3">
-                  <label className="text-sm font-medium text-gray-300">
+                  {/* <label className="text-sm font-medium text-gray-300">
                     Lock Period: {lockPeriod} days
                   </label>
                   <Slider
@@ -308,7 +308,7 @@ export function Actions() {
                     step={1}
                     onValueChange={(value) => setLockPeriod(value[0])}
                     className="py-2"
-                  />
+                  /> */}
                   <div className="flex justify-between text-xs text-gray-500">
                     <span>No lock</span>
                     <span>1 year</span>

@@ -51,7 +51,7 @@ export function Dashboard() {
         <Zap className="mr-2 h-5 w-5 text-[#9763e0]" />
         Dashboard
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-2">
         <Card className="bg-gray-900 border-gray-800">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-400 flex items-center">
@@ -113,7 +113,7 @@ export function Dashboard() {
           </CardContent>
         </Card> */}
 
-        <Card className="bg-gray-900 border-gray-800">
+        {/* <Card className="bg-gray-900 border-gray-800">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-400 flex items-center">
               Protocol TVL
@@ -124,7 +124,7 @@ export function Dashboard() {
             <div className="text-2xl font-bold text-white">${tvl}M</div>
             <div className="text-xs text-green-400 mt-1">+2.3% in 24h</div>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
     </div>
   );
