@@ -6,6 +6,8 @@ import { Progress } from '@/components/ui/progress';
 import { ArrowUpRight, TrendingUp, Award, Clock, Zap } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useCurrentAccount } from '@iota/dapp-kit';
+import { IotaClient, getFullnodeUrl } from '@iota/iota-sdk/client';
+
 
 type ScoreResponse = {
   address: string;
@@ -18,8 +20,12 @@ type ScoreResponse = {
   rank: number;
 };
 
+const client = new IotaClient({
+  url: getFullnodeUrl('testnet'),
+});
+
 export function Dashboard() {
-  const [stakedAmount] = useState(1250);
+  const [stakedAmount,setStakedAmount] = useState('0');
   const account = useCurrentAccount();
 
   const { data: score = 0 } = useQuery({
@@ -44,6 +50,25 @@ export function Dashboard() {
     },
     enabled: !!account?.address,
   });
+
+  useEffect(() => {
+
+    const getObject=async()=>{
+      const iotaObjectId = '0x7e8e05366388d163257d7d7427293db6795284f5e961cb6244c7273bb28ee652'
+      const balance = await client.getObject({
+        id: iotaObjectId,
+        options: { showContent: true },
+      });
+
+      const bal = balance.data?.content?.fields?.coin?.fields?.balance;
+      const num = Number(bal);
+      const decimalFormatted = (num / 1e8).toFixed(8);
+
+      setStakedAmount(decimalFormatted);
+      console.log('vIotaCoins',decimalFormatted);
+    }
+    getObject();
+  }, []);
 
   return (
     <div className="mb-10">
