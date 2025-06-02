@@ -45,9 +45,9 @@ export function Wallet() {
     <header className="bg-black/80 backdrop-blur-md border-b border-gray-800 py-4 sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <div className="flex items-center">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-r bg-[#9763e0] flex items-center justify-center mr-2">
+          {/* <div className="w-10 h-10 rounded-full bg-gradient-to-r bg-[#9763e0] flex items-center justify-center mr-2">
             <WalletIcon className="h-5 w-5 text-black" />
-          </div>
+          </div> */}
           <span className="text-xl font-bold text-white">
             Liquid <span className="text-[#9763e0]">DeFi</span>
           </span>
