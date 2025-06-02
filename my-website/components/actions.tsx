@@ -309,10 +309,7 @@ export function Actions() {
                     onValueChange={(value) => setLockPeriod(value[0])}
                     className="py-2"
                   /> */}
-                  <div className="flex justify-between text-xs text-gray-500">
-                    <span>No lock</span>
-                    <span>1 year</span>
-                  </div>
+           
                 </div>
 
                 {/* <div className="rounded-lg bg-gray-800 p-4 border border-gray-700">
@@ -430,7 +427,7 @@ export function Actions() {
               Free Token Claim
             </CardTitle>
             <CardDescription className="text-gray-400 text-xl">
-              Claim free tokens and Stake.
+              Claim free IOTA and Stake.
             </CardDescription>
           </CardHeader>
           <CardContent className="relative z-10">
@@ -446,7 +443,7 @@ export function Actions() {
               onClick={handleFreeTokenClaim}
             >
               <Gift className="mr-2 h-4 w-4" />
-              Claim Free Tokens
+              Claim Free Testnet IOTA
             </Button>
           </CardFooter>
         </Card>

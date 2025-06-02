@@ -22,10 +22,10 @@ export function Footer() {
             </p>
           </div>
           <div className="flex space-x-4">
-            <button onClick={openTwitter} className="text-gray-500 hover:text-[#9763e0]">
-              <Github className="h-5 w-5" />
-            </button>
             <button onClick={openGithub} className="text-gray-500 hover:text-[#9763e0]">
+              <Github className="h-5 w-5" />openTwitter
+            </button>
+            <button onClick={openTwitter} className="text-gray-500 hover:text-[#9763e0]">
               <Twitter className="h-5 w-5" />
             </button>
 

@@ -25,7 +25,7 @@ const client = new IotaClient({
 });
 
 export function Dashboard() {
-  const [stakedAmount,setStakedAmount] = useState('0');
+  const [stakedAmount,setStakedAmount] = useState(0);
   const account = useCurrentAccount();
 
   const { data: score = 0 } = useQuery({
@@ -63,9 +63,11 @@ export function Dashboard() {
       const bal = balance.data?.content?.fields?.coin?.fields?.balance;
       const num = Number(bal);
       const decimalFormatted = (num / 1e8).toFixed(8);
-
-      setStakedAmount(decimalFormatted);
-      console.log('vIotaCoins',decimalFormatted);
+      const [intPart, decimalPart] = decimalFormatted.split('.');
+      const result = `${intPart}.${decimalPart.slice(0, 4)}`;
+      const rounded = Number(result)
+      setStakedAmount(rounded);
+      console.log('vIotaCoins',rounded);
     }
     getObject();
   }, []);
