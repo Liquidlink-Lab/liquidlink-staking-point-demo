@@ -33,16 +33,14 @@ import { Slider } from '@/components/ui/slider';
 import { IotaClient, getFullnodeUrl } from '@iota/iota-sdk/client';
 
 const PACKAGE_ID =
-  '0xe87fadb56ac565aa46d60c1f5fa30b22eb10b6ea0763da70d9eb75adb75fd0b3';
+  '0xdd051fe12344d3c1ec76766d9b6cda2274c45f316fd9e79234f37ba2722ca213';
 const ACTION = 'stake';
 const LOCK_PERIOD = 86400 * 1000;
 const TREASURY_CAP_OBJECT_ID =
-  '0x91e82a7b9b2b5dfb0993eb01604d9172dc93c809850ca8b470fcd488feaea0b3';
+  '0x3bb8bd79671b28aef33ff1b8d113e446a6db0e6fb19441928d4047735be71d06';
 const VAULT_OBJECT_ID =
-  '0x7e8e05366388d163257d7d7427293db6795284f5e961cb6244c7273bb28ee652';
-
-const CERT_TYPE =
-  '0x2::coin::Coin<0xe87fadb56ac565aa46d60c1f5fa30b22eb10b6ea0763da70d9eb75adb75fd0b3::cert::CERT>';
+  '0x50ced78cad583782542faee933382e48516255894d1b1b692dff80397200312e';
+const CERT_TYPE = `0x2::coin::Coin<${PACKAGE_ID}::cert::CERT>`;
 
 const client = new IotaClient({
   url: getFullnodeUrl('testnet'),
@@ -309,7 +307,6 @@ export function Actions() {
                     onValueChange={(value) => setLockPeriod(value[0])}
                     className="py-2"
                   /> */}
-           
                 </div>
 
                 {/* <div className="rounded-lg bg-gray-800 p-4 border border-gray-700">
