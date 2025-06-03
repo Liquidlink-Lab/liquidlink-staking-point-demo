@@ -7,7 +7,9 @@ import { ArrowUpRight, TrendingUp, Award, Clock, Zap } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useCurrentAccount } from '@iota/dapp-kit';
 import { IotaClient, getFullnodeUrl } from '@iota/iota-sdk/client';
-
+import {
+  VAULT_OBJECT_ID,
+} from '@/lib/config';
 
 type ScoreResponse = {
   address: string;
@@ -25,7 +27,7 @@ const client = new IotaClient({
 });
 
 export function Dashboard() {
-  const [stakedAmount,setStakedAmount] = useState(0);
+  const [stakedAmount, setStakedAmount] = useState(0);
   const account = useCurrentAccount();
 
   const { data: score = 0 } = useQuery({
@@ -52,11 +54,9 @@ export function Dashboard() {
   });
 
   useEffect(() => {
-
-    const getObject=async()=>{
-      const iotaObjectId = '0x7e8e05366388d163257d7d7427293db6795284f5e961cb6244c7273bb28ee652'
+    const getObject = async () => {
       const balance = await client.getObject({
-        id: iotaObjectId,
+        id: VAULT_OBJECT_ID,
         options: { showContent: true },
       });
 
@@ -65,10 +65,10 @@ export function Dashboard() {
       const decimalFormatted = (num / 1e8).toFixed(8);
       const [intPart, decimalPart] = decimalFormatted.split('.');
       const result = `${intPart}.${decimalPart.slice(0, 4)}`;
-      const rounded = Number(result)
+      const rounded = Number(result);
       setStakedAmount(rounded);
-      console.log('vIotaCoins',rounded);
-    }
+      console.log('vIotaCoins', rounded);
+    };
     getObject();
   }, []);
 

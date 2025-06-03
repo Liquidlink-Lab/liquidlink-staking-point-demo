@@ -31,16 +31,14 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { Slider } from '@/components/ui/slider';
 import { IotaClient, getFullnodeUrl } from '@iota/iota-sdk/client';
-
-const PACKAGE_ID =
-  '0xdd051fe12344d3c1ec76766d9b6cda2274c45f316fd9e79234f37ba2722ca213';
-const ACTION = 'stake';
-const LOCK_PERIOD = 86400 * 1000;
-const TREASURY_CAP_OBJECT_ID =
-  '0x3bb8bd79671b28aef33ff1b8d113e446a6db0e6fb19441928d4047735be71d06';
-const VAULT_OBJECT_ID =
-  '0x50ced78cad583782542faee933382e48516255894d1b1b692dff80397200312e';
-const CERT_TYPE = `0x2::coin::Coin<${PACKAGE_ID}::cert::CERT>`;
+import {
+  PACKAGE_ID,
+  ACTION,
+  LOCK_PERIOD,
+  TREASURY_CAP_OBJECT_ID,
+  VAULT_OBJECT_ID,
+  CERT_TYPE,
+} from '@/lib/config';
 
 const client = new IotaClient({
   url: getFullnodeUrl('testnet'),

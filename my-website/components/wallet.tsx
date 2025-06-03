@@ -26,7 +26,6 @@ export function Wallet() {
   const [balance, setBalance] = useState(0);
   const { toast } = useToast();
 
-
   const disconnectWallet = () => {
     setConnected(false);
     setAddress('');
@@ -84,7 +83,6 @@ export function Wallet() {
                   <span>View on Explorer</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-gray-700" />
-
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
