@@ -7,6 +7,7 @@ edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
 [dependencies]
 Iota = { git = "https://github.com/iotaledger/iota.git", subdir = "crates/iota-framework/packages/iota-framework", rev = "testnet" }
 LiquidlinkProtocol = { git = "https://github.com/Liquidlink-Lab/liquidlink_interface.git", subdir = "./", rev = "main" }
+# Share = { git = "https://github.com/iotaledger/share.git", subdir = "./", rev = "master" }
 
 # For remote import, use the `{ git = "...", subdir = "...", rev = "..." }`.
 # Revision can be a branch, a tag, and a commit hash.
