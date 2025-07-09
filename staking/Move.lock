@@ -2,7 +2,7 @@
 
 [move]
 version = 3
-manifest_digest = "124B69D2A07DAB3EE540B2A0B2E0837D3FBE135EB90BD7A8A4469712E0475B6A"
+manifest_digest = "0292444AB5C76AAE785634F20A2F73A767CC55349BEDA01C3689773D23BE21C2"
 deps_digest = "3C4103934B1E040BB6B23F1D610B4EF9F2F1166A50A104EADCF77467C004C600"
 dependencies = [
   { id = "Iota", name = "Iota" },
@@ -19,26 +19,25 @@ dependencies = [
 
 [[move.package]]
 id = "LiquidlinkProtocol"
-source = { git = "https://github.com/Liquidlink-Lab/liquidlink_interface.git", rev = "main", subdir = "./" }
+source = { git = "https://github.com/Liquidlink-Lab/liquidlink_interface.git", rev = "testnet", subdir = "./" }
 
 dependencies = [
   { id = "Iota", name = "Iota" },
-  { id = "Share", name = "Share" },
 ]
 
 [[move.package]]
 id = "MoveStdlib"
 source = { git = "https://github.com/iotaledger/iota.git", rev = "testnet", subdir = "crates/iota-framework/packages/move-stdlib" }
 
-[[move.package]]
-id = "Share"
-source = { git = "https://github.com/Liquidlink-Lab/share_interface", rev = "master", subdir = "./" }
-
-dependencies = [
-  { id = "Iota", name = "Iota" },
-]
-
 [move.toolchain-version]
 compiler-version = "1.2.2-rc"
 edition = "2024.beta"
 flavor = "iota"
+
+[env]
+
+[env.testnet]
+chain-id = "2304aa97"
+original-published-id = "0x81c6b0dcbb366afdc1604b9f8c82b483f95a58819fb84762ac3a40c6d4340810"
+latest-published-id = "0x81c6b0dcbb366afdc1604b9f8c82b483f95a58819fb84762ac3a40c6d4340810"
+published-version = "1"

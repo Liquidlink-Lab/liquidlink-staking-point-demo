@@ -76,7 +76,7 @@ export function Actions() {
     const [coin] = tx.splitCoins(tx.gas, [stakingAmount]);
 
     tx.moveCall({
-      target: `${PACKAGE_ID}::staking::stake`,
+      target: `${PACKAGE_ID}::core::stake`,
       arguments: [
         tx.pure.string(ACTION),
         coin,
